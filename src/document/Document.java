@@ -1,6 +1,6 @@
 package document;
 
-/** 
+/*
  * A class that represents a text document
  * @author UC San Diego Intermediate Programming MOOC team
  */
@@ -11,34 +11,36 @@ import java.util.regex.Pattern;
 
 public abstract class Document {
 
-	private String text;
-	
-	/** Create a new document from the given text.
+	private final String text;
+
+	/**
+	 * Create a new document from the given text.
 	 * Because this class is abstract, this is used only from subclasses.
+	 *
 	 * @param text The text of the document.
 	 */
-	protected Document(String text)
-	{
+	protected Document(String text) {
 		this.text = text;
 	}
-	
-	/** Returns the tokens that match the regex pattern from the document 
+
+	/**
+	 * Returns the tokens that match the regex pattern from the document
 	 * text string.
-	 * @param pattern A regular expression string specifying the 
-	 *   token pattern desired
-	 * @return A List of tokens from the document text that match the regex 
-	 *   pattern
+	 *
+	 * @param pattern A regular expression string specifying the
+	 *                token pattern desired
+	 * @return A List of tokens from the document text that match the regex
+	 * pattern
 	 */
-	protected List<String> getTokens(String pattern)
-	{
-		ArrayList<String> tokens = new ArrayList<String>();
+	protected List<String> getTokens(String pattern) {
+		ArrayList<String> tokens = new ArrayList<>();
 		Pattern tokSplitter = Pattern.compile(pattern);
 		Matcher m = tokSplitter.matcher(text);
-		
+
 		while (m.find()) {
 			tokens.add(m.group());
 		}
-		
+
 		return tokens;
 	}
 	
@@ -122,17 +124,17 @@ public abstract class Document {
 	public abstract int getNumSyllables();
 	
 	/** Return the entire text of this document */
-	public String getText()
-	{
+	public String getText() {
 		return this.text;
 	}
-	
-	/** return the Flesch readability score of this document */
-	public double getFleschScore()
-	{
-	    // TODO: You will play with this method in week 1, and 
+
+	/**
+	 * return the Flesch readability score of this document
+	 */
+	public double getFleschScore() {
+		// You will play with this method in week 1, and
 		// then implement it in week 2
-	    return 0.0;
+		return text.length();
 	}
 	
 	
