@@ -107,15 +107,22 @@ public abstract class Document {
      * You should consider y a vowel.
      */
     protected int countSyllables(String word) {
-        int counter = 0;
-        if (word.charAt(word.length() - 1) == 'e')
-            word = word.substring(0, word.length() - 1);
-        while (word.matches(".*[aeiouyAEIOUY]+.*")) {
-            counter++;
-            word = word.replaceFirst("[aeiouyAEIOUY]+", "");
+        int numSyllables = 0;
+        boolean newSyllable = true;
+        String vowels = "aeiouy";
+        char[] cArray = word.toCharArray();
+        for (int i = 0; i < cArray.length; i++) {
+            if (i == cArray.length - 1 && Character.toLowerCase(cArray[i]) == 'e'
+                    && newSyllable && numSyllables > 0)
+                numSyllables--;
+            final int indexOf = vowels.indexOf(Character.toLowerCase(cArray[i]));
+            if (newSyllable && indexOf >= 0) {
+                newSyllable = false;
+                numSyllables++;
+            } else if (indexOf < 0)
+                newSyllable = true;
         }
-        return counter == 0 ? counter + 1 : counter;
-        // EfficientDocument (module 3).
+        return numSyllables;
     }
 
     /**
