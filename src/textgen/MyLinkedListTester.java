@@ -114,8 +114,21 @@ public class MyLinkedListTester {
      */
     @Test
     public void testAddEnd() {
-        // TODO: implement this test
+        emptyList.add(1);
+        assertEquals((Integer) 1, emptyList.get(0));
+        assertEquals(1, emptyList.size());
+        emptyList.add(2);
+        assertEquals((Integer) 2, emptyList.get(1));
+        assertEquals(2, emptyList.size());
+        emptyList.add(3);
+        assertEquals((Integer) 3, emptyList.get(2));
+        assertEquals(3, emptyList.size());
+        try {
+            emptyList.add(null);
+            fail("Check Null Pointer");
+        } catch (NullPointerException ignored) {
 
+        }
     }
 
 
@@ -135,8 +148,30 @@ public class MyLinkedListTester {
      */
     @Test
     public void testAddAtIndex() {
-        // TODO: implement this test
+        longerList.add(5, 10);
+        assertEquals((Integer) 10, longerList.get(5));
+        assertEquals(LONG_LIST_LENGTH + 1, longerList.size);
+        longerList.add(0, 100);
+        assertEquals((Integer) 100, longerList.get(0));
+        assertEquals(LONG_LIST_LENGTH + 2, longerList.size);
+        try {
+            emptyList.add(20, null);
+            fail("Check Null Pointer");
+        } catch (NullPointerException ignored) {
 
+        }
+        try {
+            emptyList.add(-1, 20);
+            fail("Check Index out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+
+        }
+        try {
+            emptyList.add(100, 20);
+            fail("Check Index out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+
+        }
     }
 
     /**
