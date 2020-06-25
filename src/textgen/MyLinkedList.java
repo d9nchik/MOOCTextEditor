@@ -61,9 +61,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
         LLNode<E> current = index == size ? tail : getNode(index);
 
-        LLNode<E> inserted = new LLNode<>(element);
-        inserted.next = current;
-        inserted.prev = current.prev;
+        LLNode<E> inserted = new LLNode<>(current.prev, current, element);
         inserted.prev.next = inserted;
         current.prev = inserted;
 
@@ -129,12 +127,30 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
         return previous;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[");
+        LLNode<E> current = head.next;
+        for (int i = 0; i < size; i++) {
+            sb.append(current);
+            current = current.next;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }
 
 class LLNode<E> {
     LLNode<E> prev;
     LLNode<E> next;
     E data;
+
+    public LLNode(LLNode<E> prev, LLNode<E> next, E data) {
+        this.prev = prev;
+        this.next = next;
+        this.data = data;
+    }
 
     // TODO: Add any other methods you think are useful here
     // E.g. you might want to add another constructor
@@ -145,4 +161,8 @@ class LLNode<E> {
         this.next = null;
     }
 
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 }
