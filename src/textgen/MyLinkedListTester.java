@@ -110,6 +110,12 @@ public class MyLinkedListTester {
         } catch (IndexOutOfBoundsException ignored) {
         }
 
+        try {
+            emptyList.remove(-1);
+            fail("Check out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+        }
+
     }
 
     /**
@@ -162,7 +168,7 @@ public class MyLinkedListTester {
         assertEquals((Integer) 100, longerList.get(0));
         assertEquals(LONG_LIST_LENGTH + 2, longerList.size);
         try {
-            emptyList.add(20, null);
+            longerList.add(1, null);
             fail("Check Null Pointer");
         } catch (NullPointerException ignored) {
 
@@ -191,19 +197,19 @@ public class MyLinkedListTester {
         assertEquals((Integer) 10, longerList.get(5));
         assertEquals(LONG_LIST_LENGTH, longerList.size);
         try {
-            emptyList.set(20, null);
+            longerList.set(0, null);
             fail("Check Null Pointer");
         } catch (NullPointerException ignored) {
 
         }
         try {
-            emptyList.set(-1, 20);
+            longerList.set(-1, 20);
             fail("Check Index out of bounds");
         } catch (IndexOutOfBoundsException ignored) {
 
         }
         try {
-            emptyList.set(100, 20);
+            longerList.set(100, 20);
             fail("Check Index out of bounds");
         } catch (IndexOutOfBoundsException ignored) {
 
