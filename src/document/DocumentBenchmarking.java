@@ -50,14 +50,14 @@ public class DocumentBenchmarking {
                 BasicDocument basicDocument = new BasicDocument(line);
                 basicDocument.getFleschScore();
             }
-            System.out.print((System.nanoTime() - startTime) / 1_000_000_000.0 / trials + "\t");
+            System.out.print((System.nanoTime() - startTime) / 1_000_000 + "\t");
 
             startTime = System.nanoTime();
             for (int i = 0; i < trials; i++) {
                 EfficientDocument efficientDocument = new EfficientDocument(line);
                 efficientDocument.getFleschScore();
             }
-            System.out.println((System.nanoTime() - startTime) / 1_000_000_000.0 / trials);
+            System.out.println((System.nanoTime() - startTime) / 1_000_000);
 
             /* Each time through this loop you should:
              * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)

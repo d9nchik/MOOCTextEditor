@@ -18,7 +18,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
      * Create a new empty LinkedList
      */
     public MyLinkedList() {
-        // TODO: Implement this method
+        size = 0;
+        head = new LLNode<>(null);
+        tail = new LLNode<>(null);
+        head.next = tail;
+        tail.prev = head;
     }
 
     /**
@@ -27,8 +31,8 @@ public class MyLinkedList<E> extends AbstractList<E> {
      * @param element The element to add
      */
     public boolean add(E element) {
-        // TODO: Implement this method
-        return false;
+        add(size, element);
+        return true;
     }
 
     /**
@@ -37,18 +41,47 @@ public class MyLinkedList<E> extends AbstractList<E> {
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public E get(int index) {
-        // TODO: Implement this method.
-        return null;
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Invalid index");
+        LLNode<E> current = getNode(index);
+        return current.data;
     }
 
     /**
      * Add an element to the list at the specified index
      *
      * @param element The element to add
-     * @ param The index where the element should be added
+     * @param index   where the element should be added
      */
     public void add(int index, E element) {
-        // TODO: Implement this method
+        if (element == null)
+            throw new NullPointerException("Null element is not accepted");
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException("Invalid index");
+
+        LLNode<E> current = index == size ? tail : getNode(index);
+
+        LLNode<E> inserted = new LLNode<>(element);
+        inserted.next = current;
+        inserted.prev = current.prev;
+        inserted.prev.next = inserted;
+        current.prev = inserted;
+
+        ++size;
+    }
+
+    private LLNode<E> getNode(int index) {
+        LLNode<E> current;
+        if (index <= size / 2) {
+            current = head.next;
+            for (int i = 0; i < index; i++)
+                current = current.next;
+        } else {
+            current = tail.prev;
+            for (int i = size - 1; i > index; i--)
+                current = current.prev;
+        }
+        return current;
     }
 
 
