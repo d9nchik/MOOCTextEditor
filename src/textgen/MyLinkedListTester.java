@@ -104,8 +104,12 @@ public class MyLinkedListTester {
         assertEquals("Remove: check a is correct ", 65, a);
         assertEquals("Remove: check element 0 is correct ", (Integer) 21, list1.get(0));
         assertEquals("Remove: check size is correct ", 2, list1.size());
+        try {
+            emptyList.remove(0);
+            fail("Check out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+        }
 
-        // TODO: Add more tests here
     }
 
     /**
@@ -137,7 +141,10 @@ public class MyLinkedListTester {
      */
     @Test
     public void testSize() {
-        // TODO: implement this test
+        assertEquals(LONG_LIST_LENGTH, longerList.size());
+        assertEquals(0, emptyList.size());
+        assertEquals(2, shortList.size());
+        assertEquals(3, list1.size());
     }
 
 
@@ -179,8 +186,28 @@ public class MyLinkedListTester {
      */
     @Test
     public void testSet() {
-        // TODO: implement this test
+        int previous = longerList.set(5, 10);
+        assertEquals(5, previous);
+        assertEquals((Integer) 10, longerList.get(5));
+        assertEquals(LONG_LIST_LENGTH, longerList.size);
+        try {
+            emptyList.set(20, null);
+            fail("Check Null Pointer");
+        } catch (NullPointerException ignored) {
 
+        }
+        try {
+            emptyList.set(-1, 20);
+            fail("Check Index out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+
+        }
+        try {
+            emptyList.set(100, 20);
+            fail("Check Index out of bounds");
+        } catch (IndexOutOfBoundsException ignored) {
+
+        }
     }
 
 
