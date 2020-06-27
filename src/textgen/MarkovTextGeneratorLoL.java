@@ -97,7 +97,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
      */
     @Override
     public String generateText(int numWords) {
-        if (numWords == 0 || starter.equals(""))
+        if (numWords <= 0 || starter.equals(""))
             return "";
         StringBuilder stringBuilder = new StringBuilder(starter);
         String currentWord = starter;
