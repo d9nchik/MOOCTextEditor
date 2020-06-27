@@ -82,7 +82,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
                 if (wordList.containsKey(prevWord))
                     wordList.get(prevWord).addNextWord(word);
                 else {
-                    final ListNode value = new ListNode(prevWord);
+                    final ListNode value = new ListNode();
                     value.addNextWord(word);
                     wordList.put(prevWord, value);
                 }
@@ -109,8 +109,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 
     @Override
     public String toString() {
-        return "MarkovTextGeneratorLoL{" + "wordList=" + wordList.values() +
-                '}';
+        final StringBuilder sb = new StringBuilder("MarkovTextGeneratorLoL{");
+        sb.append("wordList=");
+        wordList.forEach((k, v) -> sb.append(k).append(":").append(v));
+        sb.append('}');
+        return sb.toString();
     }
 
     /**
@@ -130,20 +133,9 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
  * You should use this class in your implementation.
  */
 class ListNode {
-    // The word that is linking to the next words
-    private final String word;
 
     // The next words that could follow it
-    private final ArrayList<String> nextWords;
-
-    ListNode(String word) {
-        this.word = word;
-        nextWords = new ArrayList<>();
-    }
-
-    public String getWord() {
-        return word;
-    }
+    private final ArrayList<String> nextWords = new ArrayList<>();
 
     public void addNextWord(String nextWord) {
         nextWords.add(nextWord);
@@ -154,7 +146,7 @@ class ListNode {
     }
 
     public String toString() {
-        StringBuilder toReturn = new StringBuilder(word + ": ");
+        StringBuilder toReturn = new StringBuilder();
         for (String s : nextWords) {
             toReturn.append(s).append("->");
         }
