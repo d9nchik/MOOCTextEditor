@@ -143,6 +143,9 @@ public class AutoCompleteDictionaryTrieTester {
 
 		completions = smallDict.predictCompletions("x", 5);
 		assertEquals(0, completions.size());
+
+		smallDict.addWord("Danylo");
+		assertTrue(smallDict.predictCompletions("Danyl", 20).contains("Danylo"));
 	}
 	
 	

@@ -152,10 +152,12 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
             if (current.getValidNextCharacters().contains(symbol))
                 current = current.getChild(symbol);
             else
-                return new LinkedList<>();
+                break;
         }
 
-        LinkedList<String> strings = breadthFirstTraversal(current, numCompletions);
+        LinkedList<String> strings = (current.getText().equals(lowercaseWord)) ?
+                breadthFirstTraversal(current, numCompletions) : new LinkedList<>();
+
         if (strings.size() < numCompletions && 'A' <= prefix.charAt(0) && prefix.charAt(0) <= 'Z') {
             lowercaseWord = prefix.charAt(0) + lowercaseWord.substring(1);
             current = root;
@@ -164,10 +166,11 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
                 if (current.getValidNextCharacters().contains(symbol))
                     current = current.getChild(symbol);
                 else
-                    return new LinkedList<>();
+                    return strings;
             }
             strings.addAll(breadthFirstTraversal(current, numCompletions - strings.size()));
         }
+
         return strings;
     }
 
