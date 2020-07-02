@@ -76,6 +76,10 @@ class TrieNode {
         isWord = true;
     }
 
+    public void resetEndsWord() {
+        isWord = false;
+    }
+
     /**
      * Return whether or not this node ends a word in the trie.
      */

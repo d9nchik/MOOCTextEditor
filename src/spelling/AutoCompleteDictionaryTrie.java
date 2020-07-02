@@ -52,10 +52,13 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
     public boolean addWord(String word) {
         if (isWord(word))
             return false;
+        if (isWord((char) ('A' - 'a' + word.charAt(0)) + word.substring(1)))
+            deleteWord((char) ('A' - 'a' + word.charAt(0)) + word.substring(1));
 
         String lowercaseWord = word.toLowerCase();
-        TrieNode current = root;
-        for (int i = 0; i < lowercaseWord.length(); i++) {
+        TrieNode current = root.getValidNextCharacters().contains(word.charAt(0))
+                ? root.getChild(word.charAt(0)) : root.insert(word.charAt(0));
+        for (int i = 1; i < lowercaseWord.length(); i++) {
             char symbol = lowercaseWord.charAt(i);
             if (current.getValidNextCharacters().contains(symbol))
                 current = current.getChild(symbol);
@@ -84,10 +87,19 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
     @Override
     public boolean isWord(String word) {
         String lowercaseWord = word.toLowerCase();
+        if (containsWord(lowercaseWord))
+            return true;
+        if (word.length() != 0 && 'A' <= word.charAt(0) && word.charAt(0) <= 'Z') {
+            lowercaseWord = word.charAt(0) + lowercaseWord.substring(1);
+            return containsWord(lowercaseWord);
+        }
+        return false;
+    }
 
+    private boolean containsWord(String word) {
         TrieNode current = root;
-        for (int i = 0; i < lowercaseWord.length(); i++) {
-            char symbol = lowercaseWord.charAt(i);
+        for (int i = 0; i < word.length(); i++) {
+            char symbol = word.charAt(i);
             if (current.getValidNextCharacters().contains(symbol))
                 current = current.getChild(symbol);
             else
@@ -95,6 +107,19 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
         }
 
         return current.isEndsWord();
+    }
+
+    private void deleteWord(String word) {
+        TrieNode current = root;
+        for (int i = 0; i < word.length(); i++) {
+            char symbol = word.charAt(i);
+            if (current.getValidNextCharacters().contains(symbol))
+                current = current.getChild(symbol);
+            else
+                return;
+        }
+        current.resetEndsWord();
+        --size;
     }
 
     /**
@@ -120,8 +145,6 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
      */
     @Override
     public List<String> predictCompletions(String prefix, int numCompletions) {
-        // TODO: Implement this method
-
         String lowercaseWord = prefix.toLowerCase();
         TrieNode current = root;
         for (int i = 0; i < lowercaseWord.length(); i++) {
@@ -132,22 +155,20 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
                 return new LinkedList<>();
         }
 
-
-        // This method should implement the following algorithm:
-        // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
-        //    empty list
-        // 2. Once the stem is found, perform a breadth first search to generate completions
-        //    using the following algorithm:
-        //    Create a queue (LinkedList) and add the node that completes the stem to the back
-        //       of the list.
-        //    Create a list of completions to return (initially empty)
-        //    While the queue is not empty and you don't have enough completions:
-        //       remove the first Node from the queue
-        //       If it is a word, add it to the completions list
-        //       Add all of its child nodes to the back of the queue
-        // Return the list of completions
-
-        return breadthFirstTraversal(current, numCompletions);
+        LinkedList<String> strings = breadthFirstTraversal(current, numCompletions);
+        if (strings.size() < numCompletions && 'A' <= prefix.charAt(0) && prefix.charAt(0) <= 'Z') {
+            lowercaseWord = prefix.charAt(0) + lowercaseWord.substring(1);
+            current = root;
+            for (int i = 0; i < lowercaseWord.length(); i++) {
+                char symbol = lowercaseWord.charAt(i);
+                if (current.getValidNextCharacters().contains(symbol))
+                    current = current.getChild(symbol);
+                else
+                    return new LinkedList<>();
+            }
+            strings.addAll(breadthFirstTraversal(current, numCompletions - strings.size()));
+        }
+        return strings;
     }
 
     // For debugging
@@ -164,7 +185,7 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
 
         System.out.println(curr.getText());
 
-        TrieNode next = null;
+        TrieNode next;
         for (Character c : curr.getValidNextCharacters()) {
             next = curr.getChild(c);
             printNode(next);

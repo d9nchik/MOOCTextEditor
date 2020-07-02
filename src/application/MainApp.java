@@ -1,14 +1,9 @@
 package application;
-	
-import java.io.IOException;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +14,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.List;
 
 
 
@@ -39,16 +39,16 @@ public class MainApp extends Application {
 		try {
 			// Load root layout from fxml
 			FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("view/RootLayout.fxml"));
-			rootLayout = (BorderPane) loader.load();
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            
-            // min height and width calculated from components in TextAppLayout
-            primaryStage.setMinHeight(430);
-            primaryStage.setMinWidth(334);
-            primaryStage.show();
-            
-          
+			rootLayout = loader.load();
+			Scene scene = new Scene(rootLayout);
+			primaryStage.setScene(scene);
+
+			// min height and width calculated from components in TextAppLayout
+			primaryStage.setMinHeight(430);
+			primaryStage.setMinWidth(334);
+			primaryStage.show();
+
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -60,22 +60,22 @@ public class MainApp extends Application {
      * Shows the main TextApplication scene
      */
     public void showTextProApp() {
-        try {
-            // Load the fxml file and set into the center of the main layout
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/TextAppLayout.fxml"));
-            
-            HBox textProPage = (HBox) loader.load();
-            rootLayout.setCenter(textProPage);
-            
-            // Connect controller and main app
-            TextProController controller = loader.getController();
-            controller.setMainApp(this);
-            
-        } catch (IOException e) {
-            // Exception gets thrown if the fxml file could not be loaded
-            e.printStackTrace();
-        }
-    }
+		try {
+			// Load the fxml file and set into the center of the main layout
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("view/TextAppLayout.fxml"));
+
+			HBox textProPage = loader.load();
+			rootLayout.setCenter(textProPage);
+
+			// Connect controller and main app
+			TextProController controller = loader.getController();
+			controller.setMainApp(this);
+
+		} catch (IOException e) {
+			// Exception gets thrown if the fxml file could not be loaded
+			e.printStackTrace();
+		}
+	}
     
     
     
@@ -103,9 +103,9 @@ public class MainApp extends Application {
      */
     public void showLoadFileDialog(AutoSpellingTextArea ta) {
     	try {
-    		// Load the fxml file and create a new stage for the popup
+			// Load the fxml file and create a new stage for the popup
 			FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("view/LoadFileLayout.fxml"));
-			VBox page = (VBox) loader.load();
+			VBox page = loader.load();
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Load File");
 			dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -136,9 +136,9 @@ public class MainApp extends Application {
  
     public void showEditDistanceDialog(String selectedText) {
     	try {
-    		// Load the fxml file and create a new stage for the popup
+			// Load the fxml file and create a new stage for the popup
 			FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("view/EditDistanceLayout.fxml"));
-			VBox page = (VBox) loader.load();
+			VBox page = loader.load();
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Calculate Edit Distance");
 			dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -229,9 +229,9 @@ public class MainApp extends Application {
     
     public void showMarkovDialog(textgen.MarkovTextGenerator mtg) {
     	try {
-    		// Load the fxml file and create a new stage for the popup
+			// Load the fxml file and create a new stage for the popup
 			FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("view/MarkovLayout.fxml"));
-			BorderPane page = (BorderPane) loader.load();
+			BorderPane page = loader.load();
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Markov Text Generator");
 			//dialogStage.initModality(Modality.WINDOW_MODAL);

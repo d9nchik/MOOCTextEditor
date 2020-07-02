@@ -55,7 +55,7 @@ public class AutoCompleteDictionaryTrieTester {
 		assertTrue("Testing isWord on small: Hello", smallDict.isWord("Hello"));
 		assertTrue("Testing isWord on large: Hello", largeDict.isWord("Hello"));
 
-		assertTrue("Testing isWord on small: hello", smallDict.isWord("hello"));
+		assertFalse("Testing isWord on small: hello", smallDict.isWord("hello"));
 		assertTrue("Testing isWord on large: hello", largeDict.isWord("hello"));
 
 		assertFalse("Testing isWord on small: hellow", smallDict.isWord("hellow"));
@@ -93,9 +93,9 @@ public class AutoCompleteDictionaryTrieTester {
 		smallDict.addWord("XYZAbC");
 		largeDict.addWord("XYZAbC");
 
-		assertTrue("Asserting xyzabc is in empty dict", emptyDict.isWord("xyzabc"));
-		assertTrue("Asserting xyzabc is in small dict", smallDict.isWord("xyzabc"));
-		assertTrue("Asserting xyzabc is large dict", largeDict.isWord("xyzabc"));
+		assertFalse("Asserting xyzabc is in empty dict", emptyDict.isWord("xyzabc"));
+		assertFalse("Asserting xyzabc is in small dict", smallDict.isWord("xyzabc"));
+		assertFalse("Asserting xyzabc is large dict", largeDict.isWord("xyzabc"));
 
 
 		commonTests();
@@ -126,21 +126,21 @@ public class AutoCompleteDictionaryTrieTester {
 		assertTrue(completions.contains("a"));
 		assertTrue(completions.contains("he"));
 		boolean twoOfThree = completions.contains("hey") && completions.contains("hot") ||
-				             completions.contains("hey") && completions.contains("hem") ||
-				             completions.contains("hot") && completions.contains("hem");
+				completions.contains("hey") && completions.contains("hem") ||
+				completions.contains("hot") && completions.contains("hem");
 		assertTrue(twoOfThree);
-		
+
 		completions = smallDict.predictCompletions("he", 2);
-		boolean allIn = completions.contains("he") && 
+		boolean allIn = completions.contains("he") &&
 				(completions.contains("hem") || completions.contains("hey"));
 		assertEquals(2, completions.size());
 		assertTrue(allIn);
-		
+
 		completions = smallDict.predictCompletions("hel", 10);
-		assertEquals(2, completions.size());
-		allIn = completions.contains("hello") && completions.contains("help");
+		assertEquals(1, completions.size());
+		allIn = completions.contains("help");
 		assertTrue(allIn);
-	
+
 		completions = smallDict.predictCompletions("x", 5);
 		assertEquals(0, completions.size());
 	}
