@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  * An trie data structure that implements the Dictionary and the AutoComplete ADT
  *
- * @author You
+ * @author d9nchik
  */
 public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
 
@@ -52,8 +52,7 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
     public boolean addWord(String word) {
         if (isWord(word))
             return false;
-        if (isWord((char) ('A' - 'a' + word.charAt(0)) + word.substring(1)))
-            deleteWord((char) ('A' - 'a' + word.charAt(0)) + word.substring(1));
+        deleteWord((char) ('A' - 'a' + word.charAt(0)) + word.substring(1));
 
         String lowercaseWord = word.toLowerCase();
         TrieNode current = root.getValidNextCharacters().contains(word.charAt(0))
@@ -118,8 +117,10 @@ public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
             else
                 return;
         }
-        current.resetEndsWord();
-        --size;
+        if (current.isEndsWord()) {
+            current.resetEndsWord();
+            --size;
+        }
     }
 
     /**
