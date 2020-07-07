@@ -1,18 +1,18 @@
 package spelling;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NearbyWordsGraderOne {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int tests = 0;
         int incorrect = 0;
         String feedback = "";
         PrintWriter out;
 
         try {
-            out = new PrintWriter("grader_output/module5.part1.out");
+            out = new PrintWriter("module5.part1.out");
         } catch (Exception e) {
             e.printStackTrace();
             return;
