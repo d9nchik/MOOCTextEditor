@@ -1,7 +1,5 @@
 package application;
 
-import java.util.function.Consumer;
-
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -14,6 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.function.Consumer;
 
 
 public class TextProController {
@@ -87,52 +87,40 @@ public class TextProController {
 		
 		
 		textBox.setWrapText(true);
-		
-		
+
+
 		// add text area as first child of left VBox
 		ObservableList<Node> nodeList = leftPane.getChildren();
 		Node firstChild = nodeList.get(0);
 		nodeList.set(0, textBox);
 		nodeList.add(firstChild);
-		
+
 		VBox.setVgrow(textBox, Priority.ALWAYS);
-		
-		
-		
+
+
 		// ADD LISTENERS FOR ADJUSTING ON RESIZE
-		
-		container.widthProperty().addListener(li -> {
-			
-			if((container.getWidth() - leftPane.getPrefWidth()) < BUTTON_WIDTH) {
-				rightBox.setVisible(false);
-			}
-			else {
-				rightBox.setVisible(true);
-			}
-		});
-		
+
+		container.widthProperty().addListener(li -> rightBox.setVisible(
+				!((container.getWidth() - leftPane.getPrefWidth()) < BUTTON_WIDTH)));
+
 		// function for setting spacing of rightBox
-		Consumer<VBox> adjustSpacing = box ->  {
-			if(container.getHeight() < RBOX_THRESHOLD) {
-				rightBox.setSpacing((container.getHeight() - CONTROL_HEIGHT)/SPACE_DIV);
-			}
-			else {
+		Consumer<VBox> adjustSpacing = box -> {
+			if (container.getHeight() < RBOX_THRESHOLD) {
+				rightBox.setSpacing((container.getHeight() - CONTROL_HEIGHT) / SPACE_DIV);
+			} else {
 				rightBox.setSpacing(DEFAULT_SPACING);
 			}
 		};
-		
-		container.heightProperty().addListener(li -> {
-			adjustSpacing.accept(rightBox);
-		});
-		
-		rightBox.visibleProperty().addListener( li -> {
-			if(rightBox.isVisible()) {
-				 container.getChildren().add(rightBox);
-				 adjustSpacing.accept(rightBox);
-			 }
-			 else {
-				 container.getChildren().remove(rightBox);
-			 }	 
+
+		container.heightProperty().addListener(li -> adjustSpacing.accept(rightBox));
+
+		rightBox.visibleProperty().addListener(li -> {
+			if (rightBox.isVisible()) {
+				container.getChildren().add(rightBox);
+				adjustSpacing.accept(rightBox);
+			} else {
+				container.getChildren().remove(rightBox);
+			}
 		});
 	}
 	
@@ -154,19 +142,19 @@ public class TextProController {
 	@FXML
 	private void handleFleschIndex() {
 		String text = textBox.getText();
-		double fIndex = 0;
-		
+		double fIndex;
+
 		// check if text input
-		if(!text.equals("")) {
-			
+		if (!text.equals("")) {
+
 			// create Document representation of  current text
 			document.Document doc = launch.getDocument(text);
-			
+
 			fIndex = doc.getFleschScore();
-			
+
 			//get string with two decimal places for index to
 			String fString = String.format("%.2f", fIndex);
-			
+
 			// display string in text field
 			fleschField.setText(fString);
 			
@@ -210,62 +198,49 @@ public class TextProController {
 	        public textgen.MarkovTextGenerator call() {
 	            // process long-running computation, data retrieval, etc...
 
-	            mtg.retrain(textBox.getText());
-	            return mtg;
-	        }
+				mtg.retrain(textBox.getText());
+				return mtg;
+			}
 		};
-		
+
 		// stage for load dialog
 		final Stage loadStage = new Stage();
-		
+
 		// consume close request until task is finished
-		loadStage.setOnCloseRequest( e -> {
-			if(!task.isDone()) {
+		loadStage.setOnCloseRequest(e -> {
+			if (!task.isDone()) {
 				e.consume();
 			}
 		});
 
-		
+
 		// show loading dialog when task is running
-		task.setOnRunning( e -> {
-			mainApp.showLoadStage(loadStage, "Training MTG...");
-		});
-		
+		task.setOnRunning(e -> mainApp.showLoadStage(loadStage, "Training MTG..."));
+
 		// MTG trained, close loading dialog, show MTG dialog
-	    task.setOnSucceeded(e -> {
-	    	loadStage.close();
-	        textgen.MarkovTextGenerator result = task.getValue();
-	        mainApp.showMarkovDialog(result);
-	    });
-	    
-	   Thread thread  = new Thread(task);
-	   thread.start();
-	  
-		
-		
+		task.setOnSucceeded(e -> {
+			loadStage.close();
+			textgen.MarkovTextGenerator result = task.getValue();
+			mainApp.showMarkovDialog(result);
+		});
+
+		Thread thread = new Thread(task);
+		thread.start();
+
+
 	}
 	
 	
 	
 	@FXML
 	private void handleAutoComplete() {
-		if(autocompleteBox.isSelected()) {
-			textBox.setAutoComplete(true);
-		}
-		else {
-			textBox.setAutoComplete(false);
-		}
+		textBox.setAutoComplete(autocompleteBox.isSelected());
 	}
 	
 	@FXML
 	private void handleSpelling() {
-		if(spellingBox.isSelected()) {
-			textBox.setSpelling(true);
-		}
-		else {
-			textBox.setSpelling(false);
-		}
-		
+		textBox.setSpelling(spellingBox.isSelected());
+
 	}
 	
 	
